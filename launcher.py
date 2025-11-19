@@ -6,6 +6,7 @@ import os
 import re
 from fractions import Fraction
 from save_data_to_excel import *
+import random
 
 def main(network_file_name, repetitions, error_cutoff, overlap):
     max_errors = []
@@ -23,11 +24,14 @@ def main(network_file_name, repetitions, error_cutoff, overlap):
     # print("Type of n: ", type(nodes_num))
         
     fractions = []
-    while nodes_num > 1:
-        nodes_num //=2
-        fractions.append(nodes_num)
+    # while nodes_num > 1:
+    #     nodes_num //=2
+    #     fractions.append(nodes_num)
 
-    fractions = fractions[::-1]
+    # fractions = fractions[::-1]
+    fractions = random.randint(1, int(nodes_num/2))
+    # print("Fractions to be used here: ", fractions)
+    # exit()
 
     for rep in range(repetitions):
         # The four fraction values
