@@ -30,7 +30,7 @@ def main(network_file_name, repetitions, error_cutoff, overlap):
 
     # fractions = fractions[::-1]
     fractions = random.randint(1, int(nodes_num/2))
-    # print("Fractions to be used here: ", fractions)
+    print("Fractions to be used here: ", fractions)
     # exit()
 
     for rep in range(repetitions):
@@ -72,58 +72,58 @@ def main(network_file_name, repetitions, error_cutoff, overlap):
             r"Diameter of Steiner tree =\s*([0-9.+\-eE]+)"
         )
 
-        for frac in fractions:
-            print(f"\n=== Running run.py with --operations {frac}  and Iteration {rep} ===")
-            proc = subprocess.Popen(
-                ["python", "run.py", "--fraction", str(frac), "--network", str(network_file_name), "--cutoff", str(error_cutoff), "--overlap", str(overlap)],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True
-            )
+        # for frac in fractions:
+        print(f"\n=== Running run.py with --operations {fractions}  and Iteration {rep} ===")
+        proc = subprocess.Popen(
+            ["python", "run.py", "--fraction", str(fractions), "--network", str(network_file_name), "--cutoff", str(error_cutoff), "--overlap", str(overlap)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True
+        )
 
-            captured = ""
+        captured = ""
 
-            # read line by line
-            for line in proc.stdout:
-                print(line, end="")       # echo to your terminal
-                captured += line
-                m = pattern.search(line)
-                m2 = pattern2.search(line)
-                m3 = pattern3.search(line)
-                m4 = pattern4.search(line)
-                m5 = pattern5.search(line)
-                m6 = pattern6.search(line)
-                m7 = pattern7.search(line)
-                m8 = pattern8.search(line)
-                if m:
-                    max_error_value = float(m.group(1))
-                if m2:
-                    num_nodes = int(m2.group(1))
-                if m3:
-                    stretch_value = float(m3.group(1))
-                if m4:
-                    min_error_value = float(m4.group(1))
-                if m5:
-                    stretch_arrow_value = float(m5.group(1))
-                if m8:
-                    stretch_new_value = float(m8.group(1))
-                if m6:
-                    diameter_of_modified_mst = int(m6.group(1))
-                if m7:
-                    diameter_of_steiner_tree = int(m7.group(1))
-            
-            proc.wait()
-            if proc.returncode != 0:
-                raise subprocess.CalledProcessError(proc.returncode, proc.args)
+        # read line by line
+        for line in proc.stdout:
+            print(line, end="")       # echo to your terminal
+            captured += line
+            m = pattern.search(line)
+            m2 = pattern2.search(line)
+            m3 = pattern3.search(line)
+            m4 = pattern4.search(line)
+            m5 = pattern5.search(line)
+            m6 = pattern6.search(line)
+            m7 = pattern7.search(line)
+            m8 = pattern8.search(line)
+            if m:
+                max_error_value = float(m.group(1))
+            if m2:
+                num_nodes = int(m2.group(1))
+            if m3:
+                stretch_value = float(m3.group(1))
+            if m4:
+                min_error_value = float(m4.group(1))
+            if m5:
+                stretch_arrow_value = float(m5.group(1))
+            if m8:
+                stretch_new_value = float(m8.group(1))
+            if m6:
+                diameter_of_modified_mst = int(m6.group(1))
+            if m7:
+                diameter_of_steiner_tree = int(m7.group(1))
+        
+        proc.wait()
+        if proc.returncode != 0:
+            raise subprocess.CalledProcessError(proc.returncode, proc.args)
 
-            max_errors.append(max_error_value)
-            min_errors.append(min_error_value)
-            stretches.append(stretch_value)
-            stretches_arrow.append(stretch_arrow_value)
-            stretches_new.append(stretch_new_value)
-            diameters_modified_mst.append(diameter_of_modified_mst)
-            diameters_steiner_tree.append(diameter_of_steiner_tree)
-            nodes_count.append(num_nodes)
+        max_errors.append(max_error_value)
+        min_errors.append(min_error_value)
+        stretches.append(stretch_value)
+        stretches_arrow.append(stretch_arrow_value)
+        stretches_new.append(stretch_new_value)
+        diameters_modified_mst.append(diameter_of_modified_mst)
+        diameters_steiner_tree.append(diameter_of_steiner_tree)
+        nodes_count.append(num_nodes)
 
 
     # Searching for the diameter of the graph from its filename

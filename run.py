@@ -610,6 +610,12 @@ def main(fraction, network_file_name, error_cutoff, overlap):
     print("Owner node:", owner)
     print("Steiner set S:", S_example)
 
+    Vp1_size = random.randint(1, len(Vp))
+    Vp1 = Vp[:Vp1_size]
+    print("Size of Vp1:", Vp1_size)
+    print("Subset of 1st Predicted Vertices (Vp1):", Vp1)
+    exit()
+
     # Select S_example, Vp, owner such that only when diameter of G_sub <= diameter of G/4
     # removed_vertices_for_subgraph = set(G_example.nodes()) - set(S_example)
 
