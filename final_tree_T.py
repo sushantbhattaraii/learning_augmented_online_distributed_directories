@@ -90,6 +90,13 @@ from itertools import combinations
 def steiner_tree(G, S):
     S = set(S)
 
+    # Handle trivial case where S has only one node
+    if(len(S) == 1):
+        T_H = nx.Graph()
+        only_node = next(iter(S))
+        T_H.add_node(only_node)
+        return T_H
+
     # Construct a complete undirected graph from G and S
     MC = nx.algorithms.approximation.steinertree.metric_closure(G)
 

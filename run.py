@@ -596,9 +596,9 @@ def main(fraction, network_file_name, error_cutoff, overlap):
         diameter_of_G = int(match2.group(1))
 
     # # Contrcut MST_g of Graph G_example for Arrow protocol
-    # mst_g = nx.minimum_spanning_tree(G_example, weight='weight')
+    mst_g = nx.minimum_spanning_tree(G_example, weight='weight')
     # # see_graph(mst_g)
-    # diameter_of_mst_g = nx.diameter(mst_g, weight='weight')
+    diameter_of_mst_g = nx.diameter(mst_g, weight='weight')
 
     # diameter_of_G = nx.diameter(G_example, weight='weight')
     print("Diameter of G_example:", diameter_of_G)
@@ -606,15 +606,68 @@ def main(fraction, network_file_name, error_cutoff, overlap):
 
     # while True:
     S_example, Vp, owner = choose_steiner_set(G_example, fraction, diameter_of_G, myNodeCount)
-    print("Randomly chosen Predicted Vertices (Vp):", Vp)
-    print("Owner node:", owner)
+    # print("Randomly chosen Predicted Vertices (Vp):", Vp)
     print("Steiner set S:", S_example)
 
-    Vp1_size = random.randint(1, len(Vp))
-    Vp1 = Vp[:Vp1_size]
-    print("Size of Vp1:", Vp1_size)
-    print("Subset of 1st Predicted Vertices (Vp1):", Vp1)
-    exit()
+    Vp_main = Vp
+    Q_main = sample_Q_within_diameter_with_overlap(G_example, Vp, error_cutoff, overlap, fraction, diameter_of_G)
+    print("The main Vp:", Vp_main)
+    print("The main Q:", Q_main)
+    print("Owner node:", owner)
+
+    VpAndQ = list(zip(Vp_main, Q_main))
+    print("Vp and Q pairs:", VpAndQ)
+    print("Length of Vp and Q pairs:", len(VpAndQ))
+    
+    # --- Configuration to extract random VpAndQ pairs---
+    # 1. Determine how many to extract (between 1 and half length)
+    # num_to_extract = random.randint(0, max(1, len(VpAndQ) // 2))
+    num_to_extract = 0
+
+    # 2. Create a working copy of the pool so we can remove items as we pick them
+    pool = list(VpAndQ)
+    random_selected_VpAndQ_pairs = []
+
+    print(f"Attempting to extract {num_to_extract} pairs...")
+
+    # --- Selection Logic ---
+    for _ in range(num_to_extract):
+        if not random_selected_VpAndQ_pairs:
+            # First selection: All items in pool are valid candidates
+            candidates = pool
+        else:
+            # Subsequent selections: Filter candidates
+            # Rule: candidate's Vp must not equal the last selected Vp
+            last_vp = random_selected_VpAndQ_pairs[-1][0]
+            candidates = [pair for pair in pool if pair[0] != last_vp]
+
+        # Safety Check: If we run out of valid candidates (corner case)
+        if not candidates:
+            print("Warning: Ran out of valid non-consecutive options early.")
+            break
+
+        # 3. Pick a random valid candidate
+        choice = random.choice(candidates)
+        
+        # 4. Add to result and remove from the available pool
+        random_selected_VpAndQ_pairs.append(choice)
+        pool.remove(choice)
+
+    print("Randomly selected Vp1 and Q1 pairs:", random_selected_VpAndQ_pairs)
+
+    random_Vp1 = [pair[0] for pair in random_selected_VpAndQ_pairs]
+    print("Randomly selected Vp1:", random_Vp1)
+
+    insert_position = random.randint(0, len(random_Vp1))
+    random_Vp1.insert(insert_position, owner)
+
+    print("Vp1 after inserting owner:", random_Vp1)
+
+    random_Vp1_set = set(random_Vp1)
+    print("Randomly selected Sorted Vp1 set:", random_Vp1_set)
+
+
+    
 
     # Select S_example, Vp, owner such that only when diameter of G_sub <= diameter of G/4
     # removed_vertices_for_subgraph = set(G_example.nodes()) - set(S_example)
@@ -628,7 +681,7 @@ def main(fraction, network_file_name, error_cutoff, overlap):
         # if diameter_of_G_sub <= diameter_of_G/3:
         #     break
     
-    T_H = steiner_tree(G_example, S_example)
+    T_H = steiner_tree(G_example, random_Vp1_set)
     # see_graph(T_H)
 
     # modified_mst, actually_removed = modify_the_mst_g(mst_g, G_example, S_example)
@@ -658,11 +711,12 @@ def main(fraction, network_file_name, error_cutoff, overlap):
     # see_graph(T)
     # T_new = augment_modified_mst_with_remaining_vertices(G_example, modified_mst, myNodeCount)
     # see_graph(T_new)
-    # diameter_of_T = nx.diameter(T, weight='weight')
+    diameter_of_T = nx.diameter(T, weight='weight')
     # diameter_of_T_new = nx.diameter(T_new, weight='weight')
-    # print("Diameter of T:", diameter_of_T)
+    print("Diameter of T:", diameter_of_T)
     # print("Diameter of T_new:", diameter_of_T_new)
         
+    exit()
 
     # verifying the edge weights by printing them
     # for u, v, weight in T.edges(data='weight'):
