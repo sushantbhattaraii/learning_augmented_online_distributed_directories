@@ -596,9 +596,9 @@ def main(fraction, network_file_name, error_cutoff, overlap):
         diameter_of_G = int(match2.group(1))
 
     # # Contrcut MST_g of Graph G_example for Arrow protocol
-    mst_g = nx.minimum_spanning_tree(G_example, weight='weight')
-    # # see_graph(mst_g)
-    diameter_of_mst_g = nx.diameter(mst_g, weight='weight')
+    # mst_g = nx.minimum_spanning_tree(G_example, weight='weight')
+    # see_graph(mst_g)
+    # diameter_of_mst_g = nx.diameter(mst_g, weight='weight')
 
     # diameter_of_G = nx.diameter(G_example, weight='weight')
     print("Diameter of G_example:", diameter_of_G)
@@ -621,8 +621,8 @@ def main(fraction, network_file_name, error_cutoff, overlap):
     
     # --- Configuration to extract random VpAndQ pairs---
     # 1. Determine how many to extract (between 1 and half length)
-    # num_to_extract = random.randint(0, max(1, len(VpAndQ) // 2))
-    num_to_extract = 0
+    num_to_extract = random.randint(0, max(1, len(VpAndQ) // 2))
+    # num_to_extract = 0
 
     # 2. Create a working copy of the pool so we can remove items as we pick them
     pool = list(VpAndQ)
@@ -706,32 +706,28 @@ def main(fraction, network_file_name, error_cutoff, overlap):
     #     print(f"{u} - {v}, weight = {v['weight'] if isinstance(v, dict) else v}")
     
     # Compute Final tree T
-    T = augment_steiner_tree_with_remaining_vertices(G_example, T_H, myNodeCount)
+    # T = augment_steiner_tree_with_remaining_vertices(G_example, T_H, myNodeCount)
+    T = construct_augmented_spanning_tree(G_example, random_Vp1_set, T_H)
+    # see_graph(T)
     # T = augment_tree_with_remaining_nodes(G_example, T_H, weight="weight")
     # see_graph(T)
     # T_new = augment_modified_mst_with_remaining_vertices(G_example, modified_mst, myNodeCount)
     # see_graph(T_new)
     diameter_of_T = nx.diameter(T, weight='weight')
     # diameter_of_T_new = nx.diameter(T_new, weight='weight')
-    print("Diameter of T:", diameter_of_T)
+    print("Diameter of T here:", diameter_of_T)
     # print("Diameter of T_new:", diameter_of_T_new)
         
-    exit()
-
     # verifying the edge weights by printing them
     # for u, v, weight in T.edges(data='weight'):
     #     print(f"Edge ({u}, {v}) has weight: {weight}")
 
     # see_graph(T)
     overlap = int(overlap)
-    Q = calculate_stretch(G_example, T, mst_g, Vp, fraction, owner, error_cutoff, overlap, myNodeCount, diameter_of_G)
+    # Q = calculate_stretch(G_example, T, mst_g, Vp, fraction, owner, error_cutoff, overlap, myNodeCount, diameter_of_G)
     print("Size of Q:", len(Q))
-    # exit()
 
-    # calculate_stretch(G_example, mst_g, Vp, fraction, owner, error_cutoff, overlap)
-
-
-    diameter_of_T = nx.diameter(T, weight='weight')
+    # diameter_of_T = nx.diameter(T, weight='weight')
     # diameter_of_T_new = nx.diameter(T_new, weight='weight')
 
     total_max_error,  total_min_error = calculate_error(Q, Vp, G_example, diameter_of_G, diameter_of_T)

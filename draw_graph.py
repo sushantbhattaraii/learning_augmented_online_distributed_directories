@@ -30,7 +30,7 @@ def see_graph(G):
 
     # Show the plot
 
-    for u, v, w in G.edges(data=True):
-        print(f"{u} -- {v} : weight = {w['weight']}")
+    # for u, v, w in G.edges(data=True):
+    #     print(f"{u} -- {v} : weight = {w['weight']}")
         
     plt.show()

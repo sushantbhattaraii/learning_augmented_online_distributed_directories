@@ -16,8 +16,8 @@ def write_to_a_file(graph, param, num_nodes, diameter):
 
 
 if __name__ == '__main__':
-    network_file_name = "1024random_diameter4test.edgelist"
-    num_nodes = 1024
+    network_file_name = "32random_diameter20test.edgelist"
+    num_nodes = 32
     # network_file_name = "256random_diameter5test.edgelist"
     # network_file_name = "512random_diameter4test.edgelist"
     # network_file_name = "1024random_diameter4test.edgelist"
