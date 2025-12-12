@@ -403,7 +403,7 @@ def calculate_stretch(G_example, T, mst_g, Vp, fraction, owner, error_cutoff, ov
     # available_for_Q = list(set(V) - {owner})
     # Q = random.sample(available_for_Q, len(Vp))
 
-    Q = sample_Q_within_diameter_with_overlap(G_example, Vp, error_cutoff, overlap, fraction, diameter_of_G)
+    # Q = sample_Q_within_diameter_with_overlap(G_example, Vp, error_cutoff, overlap, fraction, diameter_of_G)
 
     print("Selected Q = ", Q)
 
@@ -616,6 +616,7 @@ def main(fraction, network_file_name, error_cutoff, overlap):
     print("Owner node:", owner)
 
     VpAndQ = list(zip(Vp_main, Q_main))
+    VpAndQ = [(i, vp, q) for i, (vp, q) in enumerate(VpAndQ, start=1)]
     print("Vp and Q pairs:", VpAndQ)
     print("Length of Vp and Q pairs:", len(VpAndQ))
     
@@ -655,19 +656,18 @@ def main(fraction, network_file_name, error_cutoff, overlap):
 
     print("Randomly selected Vp1 and Q1 pairs:", random_selected_VpAndQ_pairs)
 
-    random_Vp1 = [pair[0] for pair in random_selected_VpAndQ_pairs]
+    random_Vp1 = [pair[1] for pair in random_selected_VpAndQ_pairs]
     print("Randomly selected Vp1:", random_Vp1)
 
     insert_position = random.randint(0, len(random_Vp1))
     random_Vp1.insert(insert_position, owner)
 
-    print("Vp1 after inserting owner:", random_Vp1)
+    Vp1_union_owner = random_Vp1
 
-    random_Vp1_set = set(random_Vp1)
-    print("Randomly selected Sorted Vp1 set:", random_Vp1_set)
+    print("Vp1 _ union _ owner:", Vp1_union_owner)
 
-
-    
+    Vp1_union_owner = set(Vp1_union_owner)
+    print("Vp1 _ union _ owner set:", Vp1_union_owner)
 
     # Select S_example, Vp, owner such that only when diameter of G_sub <= diameter of G/4
     # removed_vertices_for_subgraph = set(G_example.nodes()) - set(S_example)
@@ -681,7 +681,7 @@ def main(fraction, network_file_name, error_cutoff, overlap):
         # if diameter_of_G_sub <= diameter_of_G/3:
         #     break
     
-    T_H = steiner_tree(G_example, random_Vp1_set)
+    T_H = steiner_tree(G_example, Vp1_union_owner)
     # see_graph(T_H)
 
     # modified_mst, actually_removed = modify_the_mst_g(mst_g, G_example, S_example)
@@ -707,7 +707,7 @@ def main(fraction, network_file_name, error_cutoff, overlap):
     
     # Compute Final tree T
     # T = augment_steiner_tree_with_remaining_vertices(G_example, T_H, myNodeCount)
-    T = construct_augmented_spanning_tree(G_example, random_Vp1_set, T_H)
+    T = construct_augmented_spanning_tree(G_example, Vp1_union_owner, T_H)
     # see_graph(T)
     # T = augment_tree_with_remaining_nodes(G_example, T_H, weight="weight")
     # see_graph(T)
@@ -722,10 +722,16 @@ def main(fraction, network_file_name, error_cutoff, overlap):
     # for u, v, weight in T.edges(data='weight'):
     #     print(f"Edge ({u}, {v}) has weight: {weight}")
 
+
+    exit(0)
+
+
+
+
     # see_graph(T)
     overlap = int(overlap)
-    # Q = calculate_stretch(G_example, T, mst_g, Vp, fraction, owner, error_cutoff, overlap, myNodeCount, diameter_of_G)
-    print("Size of Q:", len(Q))
+    Q = calculate_stretch(G_example, T, mst_g, random_Vp1, len(random_Vp1), owner, error_cutoff, overlap, myNodeCount, diameter_of_G)
+    # print("Size of Q:", len(Q))
 
     # diameter_of_T = nx.diameter(T, weight='weight')
     # diameter_of_T_new = nx.diameter(T_new, weight='weight')
