@@ -19,7 +19,7 @@ from draw_graph import see_graph
 # k = 20
 # num_nodes = 128
 # k = 17
-num_nodes = 2048
+num_nodes = 2025
 k = 10
 
 watts_strogatz_prob = 0.05
@@ -30,8 +30,8 @@ internet_graph_seed = None  # optional
 
 def add_edge_weights(graph):
     for e in graph.edges:
-        # w = 1
-        w = randint(10, 20)
+        w = 1
+        # w = randint(10, 20)
         graph.add_edge(e[0], e[1], weight=w)
 
 
@@ -53,7 +53,7 @@ def write_to_a_file(graph, param):
     diameter = nx.diameter(graph, weight='weight')
     print("Diameter of the graph yoo:", diameter)
     # exit()
-    graph_name = './small_world_graphs/' + str(num_nodes) + str(param) + '_diameter' + str(diameter) + 'test.edgelist'
+    graph_name = './grid_graphs/' + str(num_nodes) + str(param) + '_diameter' + str(diameter) + 'test.edgelist'
     nx.write_graphml(graph, graph_name)
     return graph_name
 
@@ -154,6 +154,17 @@ def draw(graph):
     # plt.show()
 
 
+def build_grid_graph():
+    grid_row = int(math.sqrt(num_nodes))
+    grid_col = int(math.sqrt(num_nodes))
+    grid_graph = nx.grid_graph([grid_row, grid_col])
+    grid_graph = nx.convert_node_labels_to_integers(grid_graph)
+    # grid_graph = nx.grid_2d_graph(grid_row, grid_col)
+    assert nx.is_connected(grid_graph)
+    add_edge_weights(grid_graph)
+    return grid_graph
+
+
 def build_graphs():
 
     # # Random Graph Generation and Visualization
@@ -168,10 +179,14 @@ def build_graphs():
     # write_to_a_file(internet_graph, "internet")
     
     # Small World Graph Generation and Visualization
-    small_world_graph = build_small_world_graph()
-    # see_graph(small_world_graph)
-    write_to_a_file(small_world_graph, "small_world")
+    # small_world_graph = build_small_world_graph()
+    # # see_graph(small_world_graph)
+    # write_to_a_file(small_world_graph, "small_world")
       
+    # Grid Graph Generation and Visualization
+    grid_graph = build_grid_graph()
+    # see_graph(grid_graph)
+    write_to_a_file(grid_graph, "grid")
 
 
 if __name__ == '__main__':

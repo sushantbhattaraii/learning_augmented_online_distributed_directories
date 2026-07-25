@@ -4,20 +4,20 @@ import sys
 import os
 
 def load_graph(network_file_name):
-    graphml_file = os.path.join('small_world_graphs', str(network_file_name))
+    graphml_file = os.path.join('grid_graphs', str(network_file_name))
     G_example = nx.read_graphml(graphml_file)
     G_example = nx.relabel_nodes(G_example, lambda x: int(x))
     return G_example
 
 def write_to_a_file(graph, param, num_nodes, diameter):
-    graph_name = './small_world_graphs/mst/' + str(num_nodes) + str(param) + '_diameter' + str(diameter) + 'test.edgelist'
+    graph_name = './grid_graphs/mst/' + str(num_nodes) + str(param) + '_diameter' + str(diameter) + 'test.edgelist'
     nx.write_graphml(graph, graph_name)
     return graph_name
 
 
 if __name__ == '__main__':
-    network_file_name = "2048small_world_diameter143test.edgelist"
-    num_nodes = 2048
+    network_file_name = "1024grid_diameter62test.edgelist"
+    num_nodes = 1024
     # network_file_name = "256random_diameter5test.edgelist"
     # network_file_name = "512random_diameter4test.edgelist"
     # network_file_name = "1024random_diameter4test.edgelist"
@@ -28,4 +28,4 @@ if __name__ == '__main__':
     # see_graph(mst_g)
     diameter_of_mst_g = nx.diameter(mst_g, weight='weight')
 
-    graph_name = write_to_a_file(mst_g, "small_world", num_nodes, diameter_of_mst_g)
+    graph_name = write_to_a_file(mst_g, "grid", num_nodes, diameter_of_mst_g)
