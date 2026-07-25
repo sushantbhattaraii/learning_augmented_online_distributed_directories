@@ -19,8 +19,8 @@ from draw_graph import see_graph
 # k = 20
 # num_nodes = 128
 # k = 17
-num_nodes = 1024
-k = 8
+num_nodes = 2048
+k = 10
 
 watts_strogatz_prob = 0.05
 
@@ -30,8 +30,8 @@ internet_graph_seed = None  # optional
 
 def add_edge_weights(graph):
     for e in graph.edges:
-        w = 1
-        # w = randint(10, 20)
+        # w = 1
+        w = randint(10, 20)
         graph.add_edge(e[0], e[1], weight=w)
 
 
@@ -53,7 +53,7 @@ def write_to_a_file(graph, param):
     diameter = nx.diameter(graph, weight='weight')
     print("Diameter of the graph yoo:", diameter)
     # exit()
-    graph_name = './internet_graphs2/' + str(num_nodes) + str(param) + '_diameter' + str(diameter) + 'test.edgelist'
+    graph_name = './small_world_graphs/' + str(num_nodes) + str(param) + '_diameter' + str(diameter) + 'test.edgelist'
     nx.write_graphml(graph, graph_name)
     return graph_name
 
@@ -162,15 +162,15 @@ def build_graphs():
     # write_to_a_file(random_graph, "random")
 
     # Internet Graph Generation and Visualization
-    internet_graph = build_internet_graph()
-    see_graph(internet_graph)
-    # exit()
-    write_to_a_file(internet_graph, "internet")
+    # internet_graph = build_internet_graph()
+    # # see_graph(internet_graph)
+    # # exit()
+    # write_to_a_file(internet_graph, "internet")
     
     # Small World Graph Generation and Visualization
-    # small_world_graph = build_small_world_graph()
-    # # see_graph(small_world_graph)
-    # write_to_a_file(small_world_graph, "small_world")
+    small_world_graph = build_small_world_graph()
+    # see_graph(small_world_graph)
+    write_to_a_file(small_world_graph, "small_world")
       
 
 
