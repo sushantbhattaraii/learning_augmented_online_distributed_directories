@@ -329,7 +329,7 @@ def build_original_Vp(G, vp_size, nodes, diameter_of_G=None, seed=None, max_atte
         diameter_of_G = nx.diameter(G, weight='weight')
 
     # Distance threshold
-    thresh = diameter_of_G/16.0
+    thresh = diameter_of_G/8.0
 
     # Precompute all-pairs shortest path lengths (works well for small/medium graphs).
     # For very large graphs, replace with an on-demand cache using single-source distances.
