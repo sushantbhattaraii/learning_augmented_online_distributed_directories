@@ -376,13 +376,13 @@ def set_links_for_request_for_arrow(G, T, requesting_node, parent, linkArrow_, r
 
 
 def load_graph(network_file_name):
-    graphml_file = os.path.join('internet_graphs2', str(network_file_name))
+    graphml_file = os.path.join('grid_graphs', str(network_file_name))
     G_example = nx.read_graphml(graphml_file)
     G_example = nx.relabel_nodes(G_example, lambda x: int(x))
     return G_example
 
 def load_mst(network_file_name):
-    graphml_file = os.path.join('internet_graphs2', 'mst', str(network_file_name))
+    graphml_file = os.path.join('grid_graphs', 'mst', str(network_file_name))
     mst_example = nx.read_graphml(graphml_file)
     mst_example = nx.relabel_nodes(mst_example, lambda x: int(x))
     return mst_example
@@ -723,7 +723,7 @@ def main(fraction, network_file_name, error_cutoff, overlap):
         myNodeCount = int(match3.group(1))
 
     mst_filename = None
-    for filename in os.listdir(os.path.join('internet_graphs2', 'mst')):
+    for filename in os.listdir(os.path.join('grid_graphs', 'mst')):
         if str(myNodeCount) in filename:
             mst_filename = filename
             break
