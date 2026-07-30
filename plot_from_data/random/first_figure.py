@@ -25,7 +25,7 @@ cmap = plt.get_cmap('tab20')
 
 # Process each file to compute means
 for n in node_sizes:
-    df = pd.read_excel(f"./../../results/random_graphs/{file_mapping[n]}")
+    df = pd.read_excel(f"./../../results/random_graphs/1/{file_mapping[n]}")
     
     # Calculate means for fraction 64
     # stats['stretch_f64'].append(df[df['fraction'] == 64]['stretch'].mean())
@@ -67,5 +67,5 @@ plt.xticks([str(x) for x in node_sizes])
 plt.tight_layout(pad=0.05)
 
 # Save and display
-# plt.savefig('stretch_metrics_plot.png')
-plt.show()
+plt.savefig('first_random.png')
+# plt.show()
