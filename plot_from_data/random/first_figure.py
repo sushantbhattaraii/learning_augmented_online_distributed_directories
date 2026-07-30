@@ -3,37 +3,38 @@ import matplotlib.pyplot as plt
 
 # File mapping for each node count (using the raw CSV versions of the uploaded files)
 file_mapping = {
-    128: "128nodes_diameter138_cutoff2.0-repetitions50-overlap100.xlsx",
-    256: "256nodes_diameter114_cutoff2.0-repetitions50-overlap100.xlsx",
-    512: "512nodes_diameter106_cutoff2.0-repetitions50-overlap100.xlsx",
-    1024: "1024nodes_diameter115_cutoff2.0-repetitions50-overlap100.xlsx"
+    128: "128nodes_diameter51_cutoff2.0-repetitions50-overlap100.xlsx",
+    256: "256nodes_diameter41_cutoff2.0-repetitions50-overlap100.xlsx",
+    512: "512nodes_diameter37_cutoff2.0-repetitions50-overlap100.xlsx",
+    1024: "1024nodes_diameter33_cutoff2.0-repetitions50-overlap100.xlsx",
+    2048: "2048nodes_diameter31_cutoff2.0-repetitions50-overlap100.xlsx"
 }
 
-node_sizes = [128, 256, 512, 1024]
+node_sizes = [128, 256, 512, 1024, 2048]
 
 # Initialize lists to store mean values
 stats = {
     # 'stretch_f256': [],
     # 'stretch_arrow_f256': [],
     # 'stretch_parrow_f256': [],
-    'stretch_f256': [],
-    'stretch_arrow_f256': [],
-    'stretch_parrow_f256': [],
+    'stretch_f512': [],
+    'stretch_arrow_f512': [],
+    'stretch_parrow_f512': [],
 }
 cmap = plt.get_cmap('tab20')
 
 # Process each file to compute means
 for n in node_sizes:
-    df = pd.read_excel(f"./../../results/small_world_graphs/second_way/1/{file_mapping[n]}")
+    df = pd.read_excel(f"./../../results/random_graphs/{file_mapping[n]}")
     
     # Calculate means for fraction 64
     # stats['stretch_f64'].append(df[df['fraction'] == 64]['stretch'].mean())
     # stats['stretch_arrow_f64'].append(df[df['fraction'] == 64]['stretch_arrow'].mean())
 
     # Calculate means for fraction 256
-    stats['stretch_f256'].append(df[df['fraction'] == 256]['stretch'].mean())
-    stats['stretch_arrow_f256'].append(df[df['fraction'] == 256]['stretch_arrow'].mean())
-    stats['stretch_parrow_f256'].append(df[df['fraction'] == 256]['stretch_parrow'].mean())
+    stats['stretch_f512'].append(df[df['fraction'] == 512]['stretch'].mean())
+    stats['stretch_arrow_f512'].append(df[df['fraction'] == 512]['stretch_arrow'].mean())
+    stats['stretch_parrow_f512'].append(df[df['fraction'] == 512]['stretch_parrow'].mean())
 
 # Create the plot
 plt.figure(figsize=(2.35, 2.35*5/7), dpi=300)
@@ -41,9 +42,9 @@ plt.xticks(fontsize=8)
 plt.yticks(fontsize=8)
 
 # Plotting the 4 line graphs
-plt.plot([str(x) for x in node_sizes], stats['stretch_arrow_f256'], marker='v', linestyle='-.', label=f'Arrow', color=cmap(2), linewidth=1.1, markersize=4, zorder=2)
-plt.plot([str(x) for x in node_sizes], stats['stretch_parrow_f256'], marker='^', linestyle=':', label=f'PArrow', color=cmap(4), linewidth=1.1, markersize=4, zorder=3)
-plt.plot([str(x) for x in node_sizes], stats['stretch_f256'], marker='.', linestyle='-', label=f'OPArrow', color=cmap(0), linewidth=1.1, markersize=4, zorder=1)
+plt.plot([str(x) for x in node_sizes], stats['stretch_arrow_f512'], marker='v', linestyle='-.', label=f'Arrow', color=cmap(2), linewidth=1.1, markersize=4, zorder=2)
+plt.plot([str(x) for x in node_sizes], stats['stretch_parrow_f512'], marker='^', linestyle=':', label=f'PArrow', color=cmap(4), linewidth=1.1, markersize=4, zorder=3)
+plt.plot([str(x) for x in node_sizes], stats['stretch_f512'], marker='.', linestyle='-', label=f'OPArrow', color=cmap(0), linewidth=1.1, markersize=4, zorder=1)
 
 
 # plt.plot([str(x) for x in node_sizes], stats['stretch_f64'], marker='.', linestyle='-', label=f'Stretch$_{'O'}$$_{'P'}$$_{'A'}$$_{'r'}$$_{'r'}$$_{'o'}$$_{'w'} $(#${'opr'}$ = 64)', color=cmap(2), linewidth=1)
